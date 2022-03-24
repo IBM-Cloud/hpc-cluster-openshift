@@ -1,0 +1,21 @@
+---
+## This Pod deployment is Optional and If you want to check your PVC generated data then deploy this. 
+## Use the PVC in the POD or Deployment section.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pv-pod
+spec:
+  volumes:   ## Volume declaration
+    - name: nginx-pv-storage
+      persistentVolumeClaim:
+        claimName: nfs-pvc-hpcc
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "nginx-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: nginx-pv-storage

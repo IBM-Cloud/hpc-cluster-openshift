@@ -1,0 +1,57 @@
+---
+## Create a PV with your NFS shared folder.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-hpcc
+spec:
+  capacity:
+    storage: 450Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs-sc-hpcc
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /data            ## Shared folder of NFS server
+    server: 163.68.86.201  ## Name of the NFS server.
+
+---
+## Create a PVC from PV.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc-hpcc
+  namespace: hpcc # Choose your own Namespace 
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-sc-hpcc
+  resources:
+    requests:
+      storage: 450Gi
+
+# ---
+# ## This Pod deployment is Optional and If you want to check your PVC generated data then deploy this. 
+# ## Use the PVC in the POD or Deployment section.
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: nginx-pv-pod
+# spec:
+#   volumes:   ## Volume declaration
+#     - name: nginx-pv-storage
+#       persistentVolumeClaim:
+#         claimName: nfs-pvc-hpcc
+#   containers:
+#     - name: nginx
+#       image: nginx
+#       ports:
+#         - containerPort: 80
+#           name: "nginx-server"
+#       volumeMounts:
+#         - mountPath: "/usr/share/nginx/html"
+#           name: nginx-pv-storage

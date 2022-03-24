@@ -1,0 +1,10 @@
+##########################     instructions   #############################################
+#### Step 1 : Fill your Namespace name in 9th line and save this file like "namespace.yml"#
+#### Step 2 : create a Namespace by running "oc apply -f namespace.yml" ###################
+###########################################################################################
+
+apiVersion: v1
+kind: Namespace
+metadata: 
+   name: <namespace name here>
+

@@ -1,0 +1,64 @@
+
+######################################### 
+#  Below Config file will Crete following
+#     - Pods
+#     - ReplicaSet
+#     - Deployment
+#     - Service
+#     - Route
+#########################################
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: hpcc-deployment  
+  namespace: hpcc
+  labels:
+    app: hpcc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpcc
+  template:
+    metadata:
+      labels:
+        app: hpcc
+    spec:
+      containers:
+        - name: hpcc-container
+          image: "image-registry.openshift-image-registry.svc:5000/hpcc/hpcc-application"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpcc-svc
+  labels:
+    app: hpcc
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: hpcc
+
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hpcc-route
+  namespace: hpcc
+  labels:
+    app: hpcc
+spec:
+  to:
+    kind: Service
+    name: hpcc-svc
+    weight: 100
+  port:
+    targetPort: 8080-tcp

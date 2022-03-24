@@ -1,0 +1,147 @@
+{
+    "name": "Sample Schematic CLI workspace",
+    "type": [
+      "terraform_v1.0"
+    ],
+    "location": "us-east",
+    "resource_group": "Default",
+    "description": "HPC OpenShift Cluster schematic workspace using CLI",
+    "tags": [],
+    "template_repo": {
+      "url": "https://github.com/IBM-Cloud/hpc-cluster-openshift",
+      "githubtoken": ""
+    },
+    "template_data": [
+      {
+        "folder": ".",
+        "type": "terraform_v1.0",
+        "env_values":[
+          {
+            "TF_CLI_ARGS_apply": "-parallelism=250"
+          },
+          {
+            "TF_CLI_ARGS_plan": "-parallelism=250"
+          },
+          {
+            "VAR1":"<val1>"
+          },
+          {
+            "VAR2":"<val2>"
+          }
+        ],
+        "variablestore": [
+          {
+            "name": "api_key",
+            "value": "Please fill the Value",
+            "type": "string",
+            "secure": true,
+            "description": "This is the API key for IBM Cloud account in which the Red Hat OpenShift cluster needs to be deployed.  For more information on how to create an API key, see [Managing user API keys](https://cloud.ibm.com/docs/account?topic=account-userapikey)."
+          },
+          {
+            "name": "region",
+            "value": "Please fill the Value",
+            "type": "string",
+            "secure": false,
+            "description": "Enter a region from the following list in which the cluster will be deployed: us-south, us-east, eu-gb, eu-de, jp-tok, au-syd, jp-osa, br-sao, ca-tor. For more information, see [Region and data center locations for resource deployment](https://cloud.ibm.com/docs/overview?topic=overview-locations)."
+          },
+          {
+            "name": "resource_group",
+            "value": "Default",
+            "type": "string",
+            "secure": false,
+            "description": "Resource group name from your IBM Cloud account where the VPC resources should be deployed. For more information, see [Managing resource groups](https://cloud.ibm.com/docs/account?topic=account-rgs)."
+          },
+          {
+            "name": "cluster_prefix",
+            "value": "Please fill the Value",
+            "type": "string",
+            "secure": false,
+            "description": "Prefix that is used to name the IBM Cloud resources that are provisioned to build the Red Hat OpenShift cluster.  You cannot create more than one instance of the Red Hat OpenShift cluster with the same name. Make sure that the name is unique. Enter a prefix name, for example, 'my-openshift'.  The length of the prefix should be fewer than 13 characters."
+          },
+          {
+            "name": "ssh_key_name",
+            "value": "Please fill the Value",
+            "type": "string",
+            "description": "Comma-separated list of names of the SSH key configured in your IBM Cloud account that is used to establish a connection to the Red Hat OpenShift login node. Ensure that the SSH key is present in the same resource group and region where the cluster is being provisioned. If you do not have an SSH key in your IBM Cloud account, create one by using the [SSH keys](https://cloud.ibm.com/docs/vpc?topic=vpc-ssh-keys) instructions."
+          },
+          {
+            "name": "kube_version",
+            "value": "4.9_openshift",
+            "type": "string",
+            "secure": false,
+            "description": "The Red Hat OpenShift version that you want to set up in your cluster. Available versions:   4.9_openshift and 4.8_openshift.  For more information, see [Version information and update actions](https://cloud.ibm.com/docs/openshift?topic=openshift-openshift_versions)."
+          },
+          {
+            "name": "worker_pool_flavor",
+            "value": "bx2.4x16",
+            "type": "string",
+            "secure": false,
+            "description": "The flavor of the Red Hat OpenShift worker nodes that you want to create and attach to the cluster. For more information, see [Available flavors for VMs](https://cloud.ibm.com/docs/openshift?topic=openshift-planning_worker_nodes#vm-table)."
+          },
+          {
+            "name": "worker_nodes_per_zone",
+            "value": "1",
+            "type": "number",
+            "secure": false,
+            "description": "The number of worker nodes per zone in the default worker pool. Minimum is one node, and 1,000 is the maximum for each zone. For more information, see [Planning your worker node setup](https://cloud.ibm.com/docs/openshift?topic=openshift-planning_worker_nodes)."
+          },
+          {
+            "name": "login_node_instance_type",
+            "value": "bx2-2x8",
+            "type": "string",
+            "secure": false,
+            "description": "Specify the virtual server instance profile type name to be used to create the login (bastion) node for the Red Hat OpenShift cluster. For more information, see [Instance Profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles)."
+          },
+          {
+            "name": "storage_node_instance_type",
+            "value": "bx2-2x8",
+            "type": "string",
+            "secure": false,
+            "description": "Specify the virtual server instance profile type to be used to create the NFS storage node for the Red Hat OpenShift cluster. The storage node is used to create an NFS file system instance that is exported and can be mounted for sharing data among the Red Hat OpenShift cluster nodes. For more information, see [Instance Profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles)."
+          },
+          {
+            "name": "mount_path",
+            "value": "data",
+            "type": "string",
+            "secure": false,
+            "description": "Specify the mount path name for the exported directory on the NFS storage node. For example, if the name provided is `data`, the exported directory will be `/data`."
+          },
+          {
+            "name": "volume_profile",
+            "value": "general-purpose",
+            "type": "string",
+            "secure": false,
+            "description": "Name of the block storage volume type to be used for the NFS storage node. For more information, see [Block storage profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles)."
+          },
+          {
+            "name": "volume_iops",
+            "value": "300",
+            "type": "number",
+            "secure": false,
+            "description": "Number to represent the IOPS (Input Output Per Second) configuration for block storage to be used for the NFS storage node (valid only for `volume_profile=custom`, dependent on `volume_capacity`. Enter a value in the range 100 - 48,000). For more information, see [Custom IOPS profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=ui#custom)."
+          },  
+          {
+            "name": "volume_capacity",
+            "value": "100",
+            "type": "number",
+            "secure": false,
+            "description": "Size in GB for the block storage that will be used to build the NFS file system instance on the storage node. Enter a value in the range 10 - 16,000. For more information, see [Block storage capacity and performance](https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-performance&interface=ui#block-storage-vpc-capacity)."
+          },
+          {
+            "name": "enable_monitoring",
+            "value": "true",
+            "type": "bool",
+            "secure": false,
+            "description":"Specify whether you would like to set up a monitoring configuration for the Red Hat OpenShift cluster.  For more information, see [Monitoring cluster health](https://cloud.ibm.com/docs/openshift?topic=openshift-health-monitor)."
+          },
+          {
+            "name": "enable_logdna",
+            "value": "true",
+            "type": "bool",
+            "secure": false,
+            "description": "Specify whether you would like to set up a logging configuration for the Red Hat OpenShift cluster.  For more information, see [Forwarding cluster and app logs to IBM Log Analysis](https://cloud.ibm.com/docs/openshift?topic=openshift-health#openshift_logging)."
+          }
+        ]
+      }
+    ]
+  }

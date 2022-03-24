@@ -1,0 +1,16 @@
+###################################################
+# Copyright (C) IBM Corp. 2022 All Rights Reserved.
+# Licensed under the Apache License v2.0
+###################################################
+
+*.migrate
+*.tfstate
+*.backup
+.history
+api_key.tf
+userinput.auto.tfvars
+key/*
+.terraform*
+terraform*
+*.pem
+*.plan
